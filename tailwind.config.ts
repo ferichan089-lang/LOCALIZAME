@@ -5,22 +5,32 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        brand: "#ef4444",
-        dark: "#0a0a0f",
-        surface: "#12121a",
-        border: "#1e1e2e",
-        muted: "#6b6b8a",
-        accent: "#836ef9",
-        success: "#4ade80",
+        purple: {
+          DEFAULT: "#7B3FBF",
+          dark:    "#5A2D8F",
+          light:   "#9B6FD0",
+          pale:    "#F3EAFB",
+        },
+        gold: {
+          DEFAULT: "#F5C518",
+          dark:    "#D4A80F",
+        },
+        surface: "#FFFFFF",
+        bg:      "#FAFAFA",
+        border:  "#EEE8F4",
+        muted:   "#8888AA",
       },
-      animation: {
-        "ping-slow": "ping 2s ease-in-out infinite",
-        "fade-in": "fadeIn 0.3s ease-in-out",
-        "slide-up": "slideUp 0.3s ease-out",
+      fontFamily: {
+        sans: ["Nunito", "sans-serif"],
       },
-      keyframes: {
-        fadeIn: { from: { opacity: "0" }, to: { opacity: "1" } },
-        slideUp: { from: { transform: "translateY(20px)", opacity: "0" }, to: { transform: "translateY(0)", opacity: "1" } },
+      borderRadius: {
+        xl2: "20px",
+        xl3: "24px",
+      },
+      boxShadow: {
+        card: "0 2px 20px rgba(123, 63, 191, 0.08)",
+        purple: "0 4px 15px rgba(123, 63, 191, 0.35)",
+        "purple-lg": "0 8px 32px rgba(123, 63, 191, 0.45)",
       },
     },
   },

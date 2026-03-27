@@ -36,8 +36,8 @@ const userIcon = L.divIcon({
   iconAnchor: [12, 12],
   html: `<div style="
     width:24px;height:24px;border-radius:50%;
-    background:#836ef9;border:3px solid white;
-    box-shadow:0 0 0 6px rgba(131,110,249,0.25);
+    background:#7B3FBF;border:3px solid white;
+    box-shadow:0 0 0 6px rgba(123,63,191,0.2);
   "></div>`,
 });
 
@@ -68,7 +68,7 @@ export default function AlertMap({ alerts, userPosition }: Props) {
       zoomControl={false}
     >
       <TileLayer
-        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         attribution='&copy; <a href="https://carto.com">CARTO</a>'
         maxZoom={19}
       />
@@ -79,7 +79,7 @@ export default function AlertMap({ alerts, userPosition }: Props) {
           <Circle
             center={[userPosition.lat, userPosition.lng]}
             radius={2000}
-            pathOptions={{ color: "#836ef9", fillColor: "#836ef9", fillOpacity: 0.04, weight: 1, dashArray: "6 4" }}
+            pathOptions={{ color: "#7B3FBF", fillColor: "#7B3FBF", fillOpacity: 0.05, weight: 1.5, dashArray: "6 4" }}
           />
           <MapRecenter lat={userPosition.lat} lng={userPosition.lng} />
         </>
@@ -95,25 +95,26 @@ export default function AlertMap({ alerts, userPosition }: Props) {
             <div style={{ padding: "12px 14px", minWidth: 200 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                 <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ef4444", display: "inline-block", flexShrink: 0 }} />
-                <strong style={{ fontSize: 14, color: "#f1f1f8", lineHeight: 1.2 }}>{alert.missingName}</strong>
+                <strong style={{ fontSize: 14, color: "#1A1A2E", lineHeight: 1.2 }}>{alert.missingName}</strong>
               </div>
               {alert.missingAge && (
-                <p style={{ fontSize: 11, color: "#9999c0", marginBottom: 4 }}>
+                <p style={{ fontSize: 11, color: "#8888AA", marginBottom: 4 }}>
                   {alert.missingAge} años{alert.missingGender ? ` · ${alert.missingGender}` : ""}
                 </p>
               )}
-              <p style={{ fontSize: 11, color: "#9999c0", marginBottom: 10 }}>
+              <p style={{ fontSize: 11, color: "#8888AA", marginBottom: 10 }}>
                 📍 {alert.lastSeenWhere}
               </p>
-              <p style={{ fontSize: 11, color: "#6b6b8a", marginBottom: 12 }}>
+              <p style={{ fontSize: 11, color: "#AAAACC", marginBottom: 12 }}>
                 {formatDistanceToNow(new Date(alert.createdAt), { locale: es, addSuffix: true })}
               </p>
               <button
                 onClick={() => router.push(`/alerta/${alert.id}`)}
                 style={{
-                  display: "block", width: "100%", background: "#ef4444",
-                  color: "white", border: "none", borderRadius: 8, padding: "7px 12px",
-                  fontSize: 12, fontWeight: 600, cursor: "pointer", textAlign: "center",
+                  display: "block", width: "100%",
+                  background: "linear-gradient(135deg,#7B3FBF,#5A2D8F)",
+                  color: "white", border: "none", borderRadius: 10, padding: "8px 12px",
+                  fontSize: 12, fontWeight: 700, cursor: "pointer", textAlign: "center",
                 }}
               >
                 Ver detalles →
