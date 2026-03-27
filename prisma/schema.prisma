@@ -1,0 +1,142 @@
+// LOCALIZAME — Prisma Schema
+// Neon PostgreSQL · Next.js 15
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL")
+}
+
+// ─── ALERT ────────────────────────────────────────────────────
+// Core entity: a missing person alert
+model Alert {
+  id            String   @id @default(cuid())
+
+  // Who is missing
+  missingName   String
+  missingAge    Int?
+  missingGender String?
+  description   String
+  photoUrl      String?
+
+  // Physical description (public once alert is created)
+  height        String?
+  skinTone      String?
+  eyeColor      String?
+  hairColor     String?
+  clothingDesc  String?
+  otherFeatures String?
+
+  // Last known location
+  lastSeenWhere String
+  lastSeenAt    DateTime
+  lastLat       Float
+  lastLng       Float
+
+  // Contact for tips
+  contactPhone  String?
+  contactName   String?
+
+  // Status
+  status        String   @default("ACTIVE")  // ACTIVE | RESOLVED | CLOSED
+  isFound       Boolean  @default(false)
+  foundAt       DateTime?
+  foundNotes    String?
+
+  // Funding pool (v2: on-chain via MONAD)
+  donationTarget Float   @default(0)
+  donationRaised Float   @default(0)
+  txHash         String? // v2: MONAD smart contract tx
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  tips          Tip[]
+  donations     Donation[]
+
+  @@map("alerts")
+}
+
+// ─── TIP ──────────────────────────────────────────────────────
+// Community information / sighting report
+model Tip {
+  id            String   @id @default(cuid())
+  alertId       String
+  alert         Alert    @relation(fields: [alertId], references: [id], onDelete: Cascade)
+
+  // Anonymous or named
+  authorName    String   @default("Anónimo")
+  content       String
+
+  // Location at time of tip — key for proximity verification
+  lat           Float
+  lng           Float
+  isWithinRadius Boolean @default(false)  // within 2km of last known location
+
+  // Points system (v2: on-chain rewards via MONAD)
+  pointsEarned  Int      @default(0)
+
+  // Verification
+  isVerified    Boolean  @default(false)
+
+  createdAt     DateTime @default(now())
+
+  @@map("tips")
+}
+
+// ─── DONATION ─────────────────────────────────────────────────
+// Donation to fund the search (v2: on-chain via MONAD)
+model Donation {
+  id            String   @id @default(cuid())
+  alertId       String
+  alert         Alert    @relation(fields: [alertId], references: [id], onDelete: Cascade)
+
+  donorName     String   @default("Anónimo")
+  amountMXN     Float
+  message       String?
+
+  // v2: blockchain fields
+  txHash        String?  // MONAD tx hash
+  walletAddress String?  // donor wallet
+
+  status        String   @default("pending") // pending | confirmed
+  createdAt     DateTime @default(now())
+
+  @@map("donations")
+}
+
+// ─── USER PROFILE ────────────────────────────────────────────
+// v1: minimal — just for physical profile privacy feature
+// v2: full auth + wallet + points on-chain
+model UserProfile {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  phone         String?
+
+  // Physical characteristics — PRIVATE until alert is triggered
+  height        String?
+  skinTone      String?
+  eyeColor      String?
+  hairColor     String?
+  bloodType     String?
+  birthmarks    String?
+  tattoos       String?
+
+  // v2: wallet + points on-chain
+  walletAddress String?  @unique
+  points        Int      @default(0)
+  totalEarned   Int      @default(0)
+
+  isProfileRevealed Boolean @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("user_profiles")
+}
