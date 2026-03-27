@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
 // ─── GET /api/alerts ──────────────────────────────────────────
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const alerts = await prisma.alert.findMany({
       where: { status: "ACTIVE" },
@@ -38,14 +38,12 @@ const createSchema = z.object({
   lastLng: z.number(),
   contactName: z.string().optional(),
   contactPhone: z.string().optional(),
-  // Physical
   height: z.string().optional(),
   skinTone: z.string().optional(),
   eyeColor: z.string().optional(),
   hairColor: z.string().optional(),
   clothingDesc: z.string().optional(),
   otherFeatures: z.string().optional(),
-  // Donation
   donationTarget: z.number().min(0).default(0),
 });
 
@@ -55,15 +53,12 @@ export async function POST(req: NextRequest) {
     const data = createSchema.parse(body);
 
     const alert = await prisma.alert.create({
-      data: {
-        ...data,
-        lastSeenAt: new Date(data.lastSeenAt),
-      },
+      data: { ...data, lastSeenAt: new Date(data.lastSeenAt) },
     });
 
     return NextResponse.json(alert, { status: 201 });
-  } catch (e: any) {
-    if (e?.name === "ZodError") {
+  } catch (e: unknown) {
+    if (e instanceof z.ZodError) {
       return NextResponse.json({ error: "Datos inválidos", details: e.errors }, { status: 400 });
     }
     console.error("[POST /api/alerts]", e);

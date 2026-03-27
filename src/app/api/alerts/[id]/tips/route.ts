@@ -31,8 +31,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     });
 
     return NextResponse.json({ tip, pointsEarned, isWithinRadius, distanceKm: dist.toFixed(2) }, { status: 201 });
-  } catch (e: any) {
-    if (e?.name === "ZodError") return NextResponse.json({ error: "Datos inválidos" }, { status: 400 });
+  } catch (e: unknown) {
+    if (e instanceof z.ZodError) return NextResponse.json({ error: "Datos inválidos" }, { status: 400 });
     return NextResponse.json({ error: "Error" }, { status: 500 });
   }
 }

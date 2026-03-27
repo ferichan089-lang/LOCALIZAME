@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const alert = await prisma.alert.findUnique({
@@ -14,7 +14,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     });
     if (!alert) return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json(alert);
-  } catch (e) {
+  } catch {
     return NextResponse.json({ error: "Error" }, { status: 500 });
   }
 }
@@ -31,7 +31,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
     const alert = await prisma.alert.update({ where: { id }, data: update });
     return NextResponse.json(alert);
-  } catch (e) {
+  } catch {
     return NextResponse.json({ error: "Error" }, { status: 500 });
   }
 }

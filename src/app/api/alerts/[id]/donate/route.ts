@@ -6,7 +6,6 @@ const schema = z.object({
   donorName: z.string().default("Anónimo"),
   amountMXN: z.number().min(10).max(100000),
   message: z.string().max(500).optional(),
-  // v2: wallet + txHash from MONAD smart contract
   walletAddress: z.string().optional(),
   txHash: z.string().optional(),
 });
@@ -31,8 +30,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     });
 
     return NextResponse.json({ donation, pointsEarned: 25 }, { status: 201 });
-  } catch (e: any) {
-    if (e?.name === "ZodError") return NextResponse.json({ error: "Datos inválidos" }, { status: 400 });
+  } catch (e: unknown) {
+    if (e instanceof z.ZodError) return NextResponse.json({ error: "Datos inválidos" }, { status: 400 });
     return NextResponse.json({ error: "Error" }, { status: 500 });
   }
 }

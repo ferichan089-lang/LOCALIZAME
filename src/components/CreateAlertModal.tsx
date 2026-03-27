@@ -93,8 +93,8 @@ export function CreateAlertModal({ onClose, onSuccess, userPosition }: Props) {
       setTimeout(() => {
         onSuccess({ ...newAlert, _count: { tips: 0, donations: 0 } });
       }, 1200);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Error al crear la alerta");
     } finally {
       setLoading(false);
     }
