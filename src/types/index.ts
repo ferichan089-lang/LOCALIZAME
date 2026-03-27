@@ -13,6 +13,7 @@ export interface AlertSummary {
   donationRaised: number;
   donationTarget: number;
   createdAt: string;
+  txHash?: string | null;
   _count: { tips: number; donations: number };
 }
 
