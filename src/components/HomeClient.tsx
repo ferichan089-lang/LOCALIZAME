@@ -2,14 +2,12 @@
 
 import { useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
-import { Bell, MapPin, AlertTriangle, Users, ChevronRight, RefreshCw } from "lucide-react";
+import { Bell, MapPin, AlertTriangle, Users, RefreshCw } from "lucide-react";
 import type { AlertSummary } from "@/types";
 import { AlertCard } from "./AlertCard";
 import { CreateAlertModal } from "./CreateAlertModal";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { distanceKm } from "@/lib/geo";
-import { formatDistanceToNow } from "date-fns";
-import { es } from "date-fns/locale";
 
 const AlertMap = dynamic(() => import("./AlertMap"), {
   ssr: false,
@@ -76,17 +74,10 @@ export function HomeClient({ initialAlerts }: Props) {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={refresh}
-            disabled={refreshing}
-            className="p-2 text-white/40 hover:text-white transition-colors"
-          >
+          <button onClick={refresh} disabled={refreshing} className="p-2 text-white/40 hover:text-white transition-colors">
             <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`} />
           </button>
-          <button
-            onClick={() => setShowCreate(true)}
-            className="btn-primary text-sm flex items-center gap-1.5"
-          >
+          <button onClick={() => setShowCreate(true)} className="btn-primary text-sm flex items-center gap-1.5">
             <AlertTriangle className="w-3.5 h-3.5" />
             Crear alerta
           </button>
@@ -134,12 +125,8 @@ export function HomeClient({ initialAlerts }: Props) {
       <div className="flex flex-1 overflow-hidden">
         {/* Map */}
         <div className={`${tab === "map" ? "flex" : "hidden"} md:flex flex-1 relative`}>
-          <AlertMap
-            alerts={sortedAlerts}
-            userPosition={position}
-            onCreateAlert={() => setShowCreate(true)}
-          />
-          {/* FAB on map */}
+          <AlertMap alerts={sortedAlerts} userPosition={position} />
+          {/* FAB on map (mobile) */}
           <button
             onClick={() => setShowCreate(true)}
             className="md:hidden absolute bottom-6 right-4 z-[1000] bg-red-600 hover:bg-red-500 text-white rounded-full px-5 py-3 font-semibold text-sm flex items-center gap-2 shadow-2xl shadow-red-900/60 transition-all hover:scale-105"
@@ -157,7 +144,7 @@ export function HomeClient({ initialAlerts }: Props) {
         `}>
           <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
             <h2 className="font-semibold text-white text-sm">Alertas recientes</h2>
-            {position && <span className="text-xs text-white/30">ordenadas por distancia</span>}
+            {position && <span className="text-xs text-white/30">por distancia</span>}
           </div>
 
           <div className="flex-1 overflow-y-auto p-3 space-y-2">
@@ -166,7 +153,7 @@ export function HomeClient({ initialAlerts }: Props) {
                 <span className="text-4xl">🌐</span>
                 <p className="text-sm text-white/40 text-center">
                   No hay alertas activas.<br />
-                  <span className="text-white/60">¡Todo parece tranquilo!</span>
+                  <span className="text-white/60">¡Todo tranquilo!</span>
                 </p>
               </div>
             ) : (
@@ -189,7 +176,6 @@ export function HomeClient({ initialAlerts }: Props) {
         </aside>
       </div>
 
-      {/* Create modal */}
       {showCreate && (
         <CreateAlertModal
           onClose={() => setShowCreate(false)}

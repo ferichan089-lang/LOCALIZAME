@@ -8,7 +8,6 @@ import type { AlertSummary } from "@/types";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
-import { Bell } from "lucide-react";
 
 // ── Icons ─────────────────────────────────────────────────────
 const alertIcon = L.divIcon({
@@ -42,23 +41,24 @@ const userIcon = L.divIcon({
   "></div>`,
 });
 
-function MapRecenter({ center }: { center: [number, number] }) {
+function MapRecenter({ lat, lng }: { lat: number; lng: number }) {
   const map = useMap();
-  useEffect(() => { map.panTo(center, { animate: true }); }, [center[0], center[1]]);
+  useEffect(() => {
+    map.panTo([lat, lng], { animate: true });
+  }, [lat, lng, map]);
   return null;
 }
 
 interface Props {
   alerts: AlertSummary[];
   userPosition: { lat: number; lng: number } | null;
-  onCreateAlert: () => void;
 }
 
-export default function AlertMap({ alerts, userPosition, onCreateAlert }: Props) {
+export default function AlertMap({ alerts, userPosition }: Props) {
   const router = useRouter();
   const center: [number, number] = userPosition
     ? [userPosition.lat, userPosition.lng]
-    : [19.4326, -99.1332]; // CDMX default
+    : [19.4326, -99.1332];
 
   return (
     <MapContainer
@@ -81,7 +81,7 @@ export default function AlertMap({ alerts, userPosition, onCreateAlert }: Props)
             radius={2000}
             pathOptions={{ color: "#836ef9", fillColor: "#836ef9", fillOpacity: 0.04, weight: 1, dashArray: "6 4" }}
           />
-          <MapRecenter center={[userPosition.lat, userPosition.lng]} />
+          <MapRecenter lat={userPosition.lat} lng={userPosition.lng} />
         </>
       )}
 
@@ -94,19 +94,19 @@ export default function AlertMap({ alerts, userPosition, onCreateAlert }: Props)
           <Popup>
             <div style={{ padding: "12px 14px", minWidth: 200 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ef4444", display: "inline-block", flexShrink: 0, animation: "alertPulse 1.8s ease-in-out infinite" }} />
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ef4444", display: "inline-block", flexShrink: 0 }} />
                 <strong style={{ fontSize: 14, color: "#f1f1f8", lineHeight: 1.2 }}>{alert.missingName}</strong>
               </div>
               {alert.missingAge && (
                 <p style={{ fontSize: 11, color: "#9999c0", marginBottom: 4 }}>
-                  {alert.missingAge} años {alert.missingGender ? `· ${alert.missingGender}` : ""}
+                  {alert.missingAge} años{alert.missingGender ? ` · ${alert.missingGender}` : ""}
                 </p>
               )}
-              <p style={{ fontSize: 11, color: "#9999c0", marginBottom: 10, display: "flex", alignItems: "center", gap: 4 }}>
+              <p style={{ fontSize: 11, color: "#9999c0", marginBottom: 10 }}>
                 📍 {alert.lastSeenWhere}
               </p>
               <p style={{ fontSize: 11, color: "#6b6b8a", marginBottom: 12 }}>
-                Hace {formatDistanceToNow(new Date(alert.createdAt), { locale: es })}
+                {formatDistanceToNow(new Date(alert.createdAt), { locale: es, addSuffix: true })}
               </p>
               <button
                 onClick={() => router.push(`/alerta/${alert.id}`)}

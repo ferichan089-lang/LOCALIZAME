@@ -115,7 +115,6 @@ export function AlertDetailClient({ alert }: Props) {
           <AlertMap
             alerts={[{ ...alert, _count: { tips: alert.tips.length, donations: alert.donations.length } }]}
             userPosition={position}
-            onCreateAlert={() => {}}
           />
         </div>
 
