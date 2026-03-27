@@ -17,7 +17,7 @@
     "react-dom": "^19.0.0",
     "@prisma/client": "^6.5.0",
     "@neondatabase/serverless": "^0.10.4",
-    "@prisma/adapter-neon": "^6.5.0",
+
     "ws": "^8.18.0",
     "leaflet": "^1.9.4",
     "react-leaflet": "^4.2.1",

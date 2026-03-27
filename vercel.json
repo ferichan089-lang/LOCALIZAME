@@ -1,8 +1,5 @@
 {
   "framework": "nextjs",
   "buildCommand": "npx prisma generate && next build",
-  "installCommand": "npm install --legacy-peer-deps",
-  "env": {
-    "DATABASE_URL": "@database_url"
-  }
+  "installCommand": "npm install --legacy-peer-deps"
 }
