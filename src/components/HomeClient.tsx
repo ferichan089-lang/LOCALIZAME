@@ -10,6 +10,7 @@ import {
 import type { AlertSummary } from "@/types";
 import { AlertCard } from "./AlertCard";
 import { CreateAlertModal } from "./CreateAlertModal";
+import { WalletButton, WalletCard } from "./WalletButton";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { distanceKm } from "@/lib/geo";
 
@@ -119,15 +120,17 @@ export function HomeClient({ initialAlerts }: Props) {
           </div>
         )}
 
-        {/* Right: Live indicator */}
-        <div className="flex items-center gap-1.5">
-          <span className="inline-block w-1.5 h-1.5 rounded-full"
-            style={{ background: monadLive ? "#a0ff6f" : "#E53E3E",
-              boxShadow: monadLive ? "0 0 6px #a0ff6f" : "none",
-              animation: monadLive ? "pulse 2s infinite" : "none" }} />
-          <span style={{ color: monadLive ? "#a0ff6f" : "#ff6f6f", fontSize: 9, fontWeight: 700 }}>
-            {monadLive ? "LIVE" : "OFFLINE"}
-          </span>
+        {/* Right: Wallet button + Live dot */}
+        <div className="flex items-center gap-2">
+          <WalletButton compact />
+          <div className="flex items-center gap-1">
+            <span className="inline-block w-1.5 h-1.5 rounded-full"
+              style={{ background: monadLive ? "#a0ff6f" : "#E53E3E",
+                boxShadow: monadLive ? "0 0 6px #a0ff6f" : "none" }} />
+            <span style={{ color: monadLive ? "#a0ff6f" : "#ff6f6f", fontSize: 9, fontWeight: 700 }}>
+              {monadLive ? "LIVE" : "OFF"}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -457,7 +460,10 @@ export function HomeClient({ initialAlerts }: Props) {
               </div>
             </div>
 
-            {/* MONAD wallet section */}
+            {/* Wallet section */}
+            <WalletCard />
+
+            {/* MONAD contract info */}
             <div className="card p-4 mb-4 flex items-center gap-3" style={{ borderRadius: 20, background: "#1A0A2E" }}>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{ background: "#7B2FB5" }}>

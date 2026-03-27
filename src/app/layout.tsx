@@ -1,5 +1,9 @@
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
+import { cookieToInitialState } from "wagmi";
 import "./globals.css";
+import { AppKitProvider } from "@/context/AppKitProvider";
+import { wagmiConfig } from "@/config";
 
 export const metadata: Metadata = {
   title: "LOCALIZAME — Red de búsqueda comunitaria",
@@ -13,15 +17,23 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0f",
+  themeColor: "#FFF8F0",
   width: "device-width",
   initialScale: 1,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const hdrs        = await headers();
+  const cookie      = hdrs.get("cookie") ?? "";
+  const initialState = cookieToInitialState(wagmiConfig, cookie);
+
   return (
     <html lang="es">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <AppKitProvider initialState={initialState}>
+          {children}
+        </AppKitProvider>
+      </body>
     </html>
   );
 }
