@@ -7,18 +7,20 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --purple:     #7B3FBF;
-  --purple-dark:#5A2D8F;
-  --purple-light:#9B6FD0;
-  --purple-pale: #F3EAFB;
-  --gold:       #F5C518;
-  --gold-dark:  #D4A80F;
-  --bg:         #FAFAFA;
-  --surface:    #FFFFFF;
-  --text:       #1A1A2E;
-  --muted:      #8888AA;
-  --border:     #EEE8F4;
-  --red:        #E53E3E;
+  --purple:      #7B2FB5;
+  --purple-dark: #5A1D8E;
+  --purple-light:#9B5FD0;
+  --purple-pale: #F3E8FB;
+  --gold:        #FFC107;
+  --gold-dark:   #E6A200;
+  --gold-deep:   #A66F00;
+  --bg:          #FFF8F0;
+  --surface:     #FFFFFF;
+  --text:        #1A1025;
+  --muted:       #9999AA;
+  --border:      #EEE4F8;
+  --red:         #E53E3E;
+  --amber:       #FFA000;
 }
 
 html, body {
@@ -38,60 +40,78 @@ html, body {
 .card {
   background: var(--surface);
   border-radius: 20px;
-  box-shadow: 0 2px 20px rgba(123, 63, 191, 0.08);
+  box-shadow: 0 2px 16px rgba(123, 63, 191, 0.10);
 }
 
 .card-purple {
-  background: linear-gradient(135deg, #7B3FBF 0%, #9B6FD0 100%);
+  background: linear-gradient(130deg, #7B2FB5 0%, #9B5FD0 100%);
   border-radius: 20px;
   color: white;
+  box-shadow: 0 6px 24px rgba(123, 47, 181, 0.30);
 }
 
 .card-gold {
-  background: linear-gradient(135deg, #F5C518 0%, #FFD740 100%);
+  background: #FFC107;
   border-radius: 20px;
-  color: #2D1A00;
+  color: #1A1025;
+  box-shadow: 0 4px 16px rgba(255, 193, 7, 0.25);
 }
 
 /* ── SOS Button ── */
 .sos-ring-outer {
-  background: rgba(123, 63, 191, 0.06);
+  background: rgba(123, 47, 181, 0.06);
+  border: 1.5px solid rgba(123, 47, 181, 0.10);
   border-radius: 50%;
 }
 .sos-ring-mid {
-  background: rgba(123, 63, 191, 0.10);
+  background: rgba(123, 47, 181, 0.09);
+  border: 1.5px solid rgba(123, 47, 181, 0.14);
   border-radius: 50%;
 }
 .sos-ring-inner {
-  background: rgba(123, 63, 191, 0.16);
+  background: rgba(123, 47, 181, 0.13);
+  border: 2px solid rgba(123, 47, 181, 0.20);
   border-radius: 50%;
 }
+
 .sos-btn {
-  background: linear-gradient(145deg, #8B4FD0, #6B2FA0);
+  background: linear-gradient(145deg, #8B3FCC, #6B1FA0);
   border-radius: 50%;
+  border: 4px solid rgba(155, 95, 208, 0.40);
   box-shadow:
-    0 8px 32px rgba(123, 63, 191, 0.45),
-    0 2px 8px rgba(123, 63, 191, 0.3),
-    inset 0 1px 0 rgba(255,255,255,0.2);
+    0 8px 36px rgba(107, 31, 160, 0.50),
+    0 2px 10px rgba(107, 31, 160, 0.30),
+    inset 0 1px 0 rgba(255,255,255,0.20);
   transition: transform 0.15s, box-shadow 0.15s;
 }
 .sos-btn:active {
   transform: scale(0.95);
-  box-shadow: 0 4px 20px rgba(123, 63, 191, 0.5);
+  box-shadow: 0 4px 20px rgba(107, 31, 160, 0.60);
 }
 
 /* SOS ring pulse animation */
 @keyframes sosPulse {
-  0%   { transform: scale(1); opacity: 1; }
-  100% { transform: scale(1.12); opacity: 0.6; }
+  0%   { transform: scale(1);    opacity: 1;   }
+  100% { transform: scale(1.10); opacity: 0.5; }
 }
-.sos-pulse { animation: sosPulse 1.6s ease-in-out infinite alternate; }
+@keyframes sosPulseActive {
+  0%   { transform: scale(1);    opacity: 1;   }
+  100% { transform: scale(1.18); opacity: 0.3; }
+}
+.sos-idle .sos-ring-outer { animation: sosPulse 3s ease-in-out infinite alternate; }
+.sos-idle .sos-ring-mid   { animation: sosPulse 3s ease-in-out infinite alternate; animation-delay: 0.6s; }
+.sos-idle .sos-ring-inner { animation: sosPulse 3s ease-in-out infinite alternate; animation-delay: 1.2s; }
+
+.sos-active .sos-ring-outer { animation: sosPulseActive 1s ease-in-out infinite alternate; }
+.sos-active .sos-ring-mid   { animation: sosPulseActive 1s ease-in-out infinite alternate; animation-delay: 0.2s; }
+.sos-active .sos-ring-inner { animation: sosPulseActive 1s ease-in-out infinite alternate; animation-delay: 0.4s; }
 
 /* ── Bottom nav ── */
 .bottom-nav {
   background: white;
-  border-top: 1px solid var(--border);
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+  border-top: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+  border-radius: 20px 20px 0 0;
 }
 
 /* ── Inputs ── */
@@ -115,7 +135,7 @@ html, body {
 
 /* ── Buttons ── */
 .btn-primary {
-  background: linear-gradient(135deg, #7B3FBF, #5A2D8F);
+  background: linear-gradient(135deg, #7B2FB5, #5A1D8E);
   color: white;
   border: none;
   border-radius: 14px;
@@ -125,9 +145,9 @@ html, body {
   font-size: 15px;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 4px 15px rgba(123, 63, 191, 0.35);
+  box-shadow: 0 4px 15px rgba(90, 29, 142, 0.35);
 }
-.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(123,63,191,0.45); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(90,29,142,0.45); }
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
 .btn-ghost {
@@ -142,7 +162,7 @@ html, body {
   cursor: pointer;
   transition: background 0.2s;
 }
-.btn-ghost:hover { background: #EAD8F8; }
+.btn-ghost:hover { background: #EAD4F8; }
 
 /* ── Alert badge ── */
 .badge-active {
@@ -170,8 +190,8 @@ html, body {
   padding: 3px 10px;
 }
 
-/* ── Leaflet dark override → light ── */
-.leaflet-container { background: #E8E4F0 !important; }
+/* ── Leaflet ── */
+.leaflet-container { background: #EDE8F6 !important; }
 .leaflet-popup-content-wrapper {
   background: white !important;
   border: 1px solid var(--border) !important;
